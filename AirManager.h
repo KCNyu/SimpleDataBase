@@ -43,6 +43,7 @@ class FlightAll{
         int nKol;
         list<FlightInfo> Flights;
     public:
+
 };
 #endif /* AIRMANAGER_H */
 /*
