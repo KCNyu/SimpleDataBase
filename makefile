@@ -6,8 +6,8 @@ server: server.o AirManager.o
 	g++ -o server server.o AirManager.o
 server.o: server.cpp AirManager.h
 	g++ -c server.cpp
-AirManager.o: AirManager.cpp AirManager.h
-	g++ -c AirManager.cpp
+AirManager.o: AirManager.hpp AirManager.h
+	g++ -c AirManager.hpp
 
 clean:
 	rm server client *.o

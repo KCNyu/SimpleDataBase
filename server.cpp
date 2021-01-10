@@ -12,15 +12,32 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <cstring>
-#include "AirManager.h"
+#include "AirManager.hpp"
 
-#define MAX_MSG 1024
+#define MAX_MSG 65536
 
 using namespace std;
 
 int main(int argc, char* argv[]){
 
-    FlightInfo f;
+    srand(time(NULL));
+    FlightAll flall;
+    Tree<Country> treeFrom;
+    Tree<Country> treeTo;
+    Tree<Airline> treeAirline;
+    Tree<double> treeDuration;
+    int nFl = 100;
+    for(int i = 0; i < nFl; i++){
+        FlightInfo f;
+        flall.Add(f);
+
+        Country c_from = flall.GetFrom_country(i);
+        Country c_to = flall.GetTo_country(i);
+        Airline a = flall.GetAirline_Airline(i);
+        treeFrom.Add(&c_from,NULL,flall.GetKol()-1);
+        treeTo.Add(&c_to,NULL,flall.GetKol()-1);
+        treeAirline.Add(&a,NULL,flall.GetKol()-1);
+    }
 
 ////////////////////////////////////////////////////////////////////
 
@@ -87,7 +104,7 @@ int main(int argc, char* argv[]){
             fgets(message,MAX_MSG,stdin);
             */
             if(strcmp(message,"print\n") == 0){
-                strcpy(message,f.print().c_str());
+                strcpy(message,flall.print().c_str());
             }
             else{
                 strcpy(message,"recevied!\n");

@@ -13,7 +13,7 @@
 #include <sys/socket.h>
 #include <cstring>
 
-#define MAX_MSG 1024
+#define MAX_MSG 65536
 
 using namespace std;
 
@@ -67,7 +67,7 @@ int main(int argc, char* argv[]){
             exit(-1);
         }
 
-        cout << "The server told me: " << message << endl;
+        cout << "The server told me: \n" << message << endl;
 
         memset(buf,0,MAX_MSG);
         memset(message,0,MAX_MSG);

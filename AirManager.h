@@ -7,8 +7,9 @@
 #define AIRMANAGER_H
 
 #include <iostream>
-#include <list>
 using namespace std;
+
+#define MAX_INFO 32767
 
 enum Country{ EngLand, America, Canada, Russia, France, Germany, Japan, China};
 enum Airline{ AA, MU, BA, FK, QR, SQ, UA, SU };
@@ -24,7 +25,10 @@ class FlightInfo {
         double duration;
     public:
         FlightInfo();
-        FlightInfo(const FlightInfo&);
+        //FlightInfo(const FlightInfo&);
+        Country GetFrom_country()const;
+        Country GetTo_country()const;
+        Airline GetAirline_Airline()const;
         string GetFrom()const;
         string GetTo()const;
         string GetAirline()const;
@@ -36,15 +40,49 @@ class FlightInfo {
         //friend bool operator<(const Fio& f1, const Fio& f2);
 };
 
-const int NALL = 32767;
-
 class FlightAll{
     private:
         int nKol;
-        list<FlightInfo> Flights;
+        FlightInfo Flights[MAX_INFO];
     public:
+        FlightAll();
+        FlightInfo GetFlight(int)const;
+        Country GetFrom_country(int)const;
+        Country GetTo_country(int)const;
+        Airline GetAirline_Airline(int)const;
+        int GetKol()const;
+        string GetFrom(int)const;
+        string GetTo(int)const;
+        string GetAirline(int)const;
+        string GetDeparture(int)const;
+        double GetDuration(int);
+        bool Add(FlightInfo& info);
+        string print()const;
+        friend ostream& operator<<(ostream& os, const FlightAll& flall);
 
 };
+template <typename Key>
+class Tree{
+    private:
+        int nDepth;
+        Key* pKey;
+        int nNom[MAX_INFO];
+        int nNom_i;
+        Tree* pParent;
+        Tree* pLeft;
+        Tree* pRight;
+    public:
+        Tree();
+        ~Tree();
+        int GetDepth()const;
+        int* GetNom()const;
+        Tree* GetLeft();
+        Tree* GetRight();
+        bool Add(Key* pkey, Tree* pParent, int nNom);
+        int* Search(Key* pKey);
+        int Search_i(Key* pKey)const;
+};
+
 #endif /* AIRMANAGER_H */
 /*
    typedef enum { ADD, SELECT, DELETE, UPDATE, FIND } CommandType;
