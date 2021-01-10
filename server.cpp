@@ -103,7 +103,7 @@ int main(int argc, char* argv[]){
             memset(message,0,MAX_MSG);
             fgets(message,MAX_MSG,stdin);
             */
-            if(strcmp(message,"print\n") == 0){
+            if(strcmp(message,"SHOW\n") == 0){
                 strcpy(message,flall.print().c_str());
             }
             else if(strncmp(message,"FROM",4) == 0){

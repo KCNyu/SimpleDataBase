@@ -18,6 +18,8 @@ string Airline_to_string(Airline);
 Country string_to_Country(char*);
 Airline string_to_Airline(char*);
 
+/////////////////////////////////////////////////////////////////////////
+
 class FlightInfo {
     private:
         Country from;
@@ -42,6 +44,8 @@ class FlightInfo {
         //friend bool operator<(const Fio& f1, const Fio& f2);
 };
 
+/////////////////////////////////////////////////////////////////////////
+
 class FlightAll{
     private:
         int nKol;
@@ -63,6 +67,9 @@ class FlightAll{
         friend ostream& operator<<(ostream& os, const FlightAll& flall);
 
 };
+
+/////////////////////////////////////////////////////////////////////////
+
 template <typename Key>
 class Tree{
     private:

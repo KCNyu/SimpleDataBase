@@ -69,6 +69,9 @@ Airline string_to_Airline(char* s){
     else throw "ERROR";
     return a;
 }
+
+/////////////////////////////////////////////////////////////////////////
+
 FlightInfo::FlightInfo(){
     int f_r = rand()%8;
     int f_t = rand()%8;
@@ -133,6 +136,9 @@ string FlightInfo::print() const{
     cout.rdbuf(buffer);
     return res;
 }
+
+/////////////////////////////////////////////////////////////////////////
+
 FlightAll::FlightAll(){
     nKol = 0;
 }
@@ -187,6 +193,9 @@ string FlightAll::print() const{
     cout.rdbuf(buffer);
     return res;
 }
+
+/////////////////////////////////////////////////////////////////////////
+
 template <typename Key>
 Tree<Key>::Tree(){
     nDepth = -1;
