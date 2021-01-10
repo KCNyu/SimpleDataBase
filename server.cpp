@@ -106,6 +106,18 @@ int main(int argc, char* argv[]){
             if(strcmp(message,"print\n") == 0){
                 strcpy(message,flall.print().c_str());
             }
+            else if(strncmp(message,"FROM",4) == 0){
+                Country c = string_to_Country(message+5);
+                strcpy(message,treeFrom.Search_print(&c,flall).c_str());
+            }
+            else if(strncmp(message,"TO",2) == 0){
+                Country c = string_to_Country(message+3);
+                strcpy(message,treeTo.Search_print(&c,flall).c_str());
+            }
+            else if(strncmp(message,"AIRLINE",7) == 0){
+                Airline a = string_to_Airline(message+8);
+                strcpy(message,treeAirline.Search_print(&a,flall).c_str());
+            }
             else{
                 strcpy(message,"recevied!\n");
             }

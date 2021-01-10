@@ -11,10 +11,12 @@ using namespace std;
 
 #define MAX_INFO 32767
 
-enum Country{ EngLand, America, Canada, Russia, France, Germany, Japan, China};
+enum Country{ England, America, Canada, Russia, France, Germany, Japan, China};
 enum Airline{ AA, MU, BA, FK, QR, SQ, UA, SU };
 string Country_to_string(Country);
 string Airline_to_string(Airline);
+Country string_to_Country(char*);
+Airline string_to_Airline(char*);
 
 class FlightInfo {
     private:
@@ -81,6 +83,7 @@ class Tree{
         bool Add(Key* pkey, Tree* pParent, int nNom);
         int* Search(Key* pKey);
         int Search_i(Key* pKey)const;
+        string Search_print(Key* pKey,const FlightAll& flall);
 };
 
 #endif /* AIRMANAGER_H */

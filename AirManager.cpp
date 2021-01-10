@@ -10,7 +10,6 @@
 #include <cmath>
 #include <ctime>
 #include <iomanip>
-#include <cstring>
 #include "AirManager.h"
 
 using namespace std;
@@ -42,32 +41,6 @@ string Airline_to_string(Airline a){
         case 7: res = "SU";break;
     }
     return res;
-}
-Country string_to_Country(char* s){
-    Country c;
-    if(strcmp(s,"England\n") == 0) c = England;
-    else if(strcmp(s,"America\n") == 0) c = America;
-    else if(strcmp(s,"Canada\n") == 0) c = Canada;
-    else if(strcmp(s,"Russia\n") == 0) c = Russia;
-    else if(strcmp(s,"France\n") == 0) c = France;
-    else if(strcmp(s,"Germany\n") == 0) c = Germany;
-    else if(strcmp(s,"Japan\n") == 0) c = Japan;
-    else if(strcmp(s,"China\n") == 0) c = China;
-    else throw "ERROR";
-    return c;
-}
-Airline string_to_Airline(char* s){
-    Airline a;
-    if(strcmp(s,"AA\n") == 0) a = AA;
-    else if(strcmp(s,"MU\n") == 0) a = MU;
-    else if(strcmp(s,"BA\n") == 0) a = BA;
-    else if(strcmp(s,"FK\n") == 0) a = FK;
-    else if(strcmp(s,"QR\n") == 0) a = QR;
-    else if(strcmp(s,"SQ\n") == 0) a = SQ;
-    else if(strcmp(s,"UA\n") == 0) a = UA;
-    else if(strcmp(s,"SU\n") == 0) a = SU;
-    else throw "ERROR";
-    return a;
 }
 FlightInfo::FlightInfo(){
     int f_r = rand()%8;
@@ -258,4 +231,46 @@ string Tree<Key>::Search_print(Key* pKey, const FlightAll& flall){
     string s(ss.str());
     cout.rdbuf(buffer);
     return s;
+}
+int main(int argc, char *argv[])
+{
+    srand(time(NULL));
+    FlightAll flall;
+    Tree<Country> treeFrom;
+    Tree<Country> treeTo;
+    Tree<Airline> treeAirline;
+    Tree<double> treeDuration;
+    int nFl = 100;
+    for(int i = 0; i < nFl; i++){
+        FlightInfo f;
+        flall.Add(f);
+
+        Country c_from = flall.GetFrom_country(i);
+        Country c_to = flall.GetTo_country(i);
+        Airline a = flall.GetAirline_Airline(i);
+        treeFrom.Add(&c_from,NULL,flall.GetKol()-1);
+        treeTo.Add(&c_to,NULL,flall.GetKol()-1);
+        treeAirline.Add(&a,NULL,flall.GetKol()-1);
+    }
+    cout << flall;
+
+    Country c = Russia;
+    Airline a = UA;
+
+    /*
+    int *res;
+    int res_n;
+
+    if((res_n = treeFrom.Search_i(&c)) != -1) res = treeFrom.Search(&c);
+    for(int i = 0; i < res_n; i++) cout << flall.GetFlight(res[i]) << endl;
+
+
+    if((res_n = treeTo.Search_i(&c)) != -1) res = treeTo.Search(&c);
+    for(int i = 0; i < res_n; i++) cout << flall.GetFlight(res[i]) << endl;
+
+    if((res_n = treeAirline.Search_i(&a)) != -1) res = treeAirline.Search(&a);
+    for(int i = 0; i < res_n; i++) cout << flall.GetFlight(res[i]) << endl;
+    */
+    cout << treeFrom.Search_print(&c,flall) << endl;
+    return 0;
 }
