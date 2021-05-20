@@ -12,7 +12,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <cstring>
-#include "AirManager.hpp"
+#include "AirManager.h"
 
 #define MAX_MSG 65536
 
@@ -122,7 +122,7 @@ int main(int argc, char* argv[]){
                 strcpy(message,"recevied!\n");
             }
 
-            int w_len = write(client_socket, message, strlen(message));
+            size_t w_len = write(client_socket, message, strlen(message));
 
             if(w_len != strlen(message)){
                 cout << "write() error!" << endl;

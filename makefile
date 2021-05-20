@@ -1,8 +1,20 @@
-all: server client
+OBJS1 = ./obj/server.o ./obj/AirManager.o
+OBJS2 = ./obj/client.o
+inc_path = ./inc
 
-client: client.cpp
-	g++ -o client client.cpp
-server: server.cpp AirManager.hpp
-	g++ -o server server.cpp AirManager.hpp
+myArgs = -Wall -g
+
+All: server client
+
+server: $(OBJS1)
+	g++ $^ -o $@ $(myArgs)
+client: $(OBJS2)
+	g++ $^ -o $@ $(myArgs)
+$(OBJS1): ./obj/%.o: ./src/%.cpp
+	g++ -c $< -o $@ $(myArgs) -I $(inc_path)
+$(OBJS2): ./obj/%.o: ./src/%.cpp
+	g++ -c $< -o $@ $(myArgs) -I $(inc_path)
 clean:
-	rm server client
+	rm -rf $(OBJS1) $(OBJS2) server client
+
+.PHONY: ALL clean

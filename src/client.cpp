@@ -57,7 +57,7 @@ int main(int argc, char* argv[]){
 			if(buf[0] == 'q' || buf[0] == 'Q') break;
 		}
 
-        if(strlen(buf) != write(client_socket, buf, strlen(buf))){
+        if(strlen(buf) != static_cast<size_t>(write(client_socket, buf, strlen(buf)))){
             cerr << "write() error!" << endl;
             exit(-1);
         }

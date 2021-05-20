@@ -4,13 +4,6 @@
  * Createtime:Wed 06 Jan 2021 02:39:00 PM CST
  ================================================================*/
 
-#include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <cmath>
-#include <ctime>
-#include <iomanip>
-#include <cstring>
 #include "AirManager.h"
 
 using namespace std;
@@ -192,79 +185,4 @@ string FlightAll::print() const{
     string res(ss.str());
     cout.rdbuf(buffer);
     return res;
-}
-
-/////////////////////////////////////////////////////////////////////////
-
-template <typename Key>
-Tree<Key>::Tree(){
-    nDepth = -1;
-    nNom_i = 0;
-}
-template <typename Key>
-Tree<Key>::~Tree(){
-    if(nDepth < 0) return;
-    delete pKey;
-    delete pLeft;
-    delete pRight;
-}
-template <typename Key>
-int Tree<Key>::GetDepth() const{
-    return nDepth;
-}
-template <typename Key>
-int* Tree<Key>::GetNom() const{
-    return nNom;
-}
-template <typename Key>
-Tree<Key>* Tree<Key>::GetLeft(){
-    return pLeft;
-}
-template <typename Key>
-Tree<Key>* Tree<Key>::GetRight(){
-    return pRight;
-}
-template <typename Key>
-bool Tree<Key>::Add(Key* pKey, Tree* pParent, int nNom){
-    if(nDepth < 0){
-        nDepth = 0;
-        this->pKey = new Key(*pKey);
-        this->nNom[nNom_i++] = nNom;
-        this->pParent = pParent;
-        this->pLeft = new Tree<Key>;
-        this->pRight = new Tree<Key>;
-        return true;
-    }
-    if(*this->pKey == *pKey){
-        this->nNom[nNom_i++] = nNom;
-        return true;
-    }
-    if(*this->pKey < *pKey) { if(!pLeft->Add(pKey,this,nNom)) return false; }
-    else { if(!pRight->Add(pKey,this,nNom)) return false; }
-    nDepth = max(pLeft->GetDepth(),pRight->GetDepth())+1;
-    return true;
-}
-template <typename Key>
-int* Tree<Key>::Search(Key* pKey){
-    if(*this->pKey == *pKey) return this->nNom;
-    return (*this->pKey < *pKey) ? pLeft->Search(pKey) : pRight->Search(pKey);
-}
-template <typename Key>
-int Tree<Key>::Search_i(Key* pKey) const{
-    if(nDepth < 0) return -1;
-    if(*this->pKey == *pKey) return this->nNom_i;
-    return (*this->pKey < *pKey) ? pLeft->Search_i(pKey) : pRight->Search_i(pKey);
-}
-template <typename Key>
-string Tree<Key>::Search_print(Key* pKey, const FlightAll& flall){
-    stringstream ss;
-    streambuf* buffer = cout.rdbuf();
-    cout.rdbuf(ss.rdbuf());
-    int *res;
-    int res_n;
-    if((res_n = Search_i(pKey)) != -1) res = Search(pKey);
-    for(int i = 0; i < res_n; i++) cout << flall.GetFlight(res[i]) << endl;
-    string s(ss.str());
-    cout.rdbuf(buffer);
-    return s;
 }
