@@ -14,22 +14,19 @@
 #include <cstring>
 
 #define MAX_MSG 65536
+#define SVR_PORT 9999
+#define SVR_ADDR "127.0.0.1"
 
 using namespace std;
 
 int main(int argc, char* argv[]){
-	if (argc != 2)
-	{
-        cerr << "use this with port" << endl;
-		return -1;
-	}
     int client_socket=socket(AF_INET,SOCK_STREAM,0);
 
     struct sockaddr_in server_addr;
 	memset(&server_addr, 0, sizeof(server_addr));
 	server_addr.sin_family=AF_INET;
-	server_addr.sin_port=htons(atoi(argv[1]));
-	server_addr.sin_addr.s_addr=inet_addr("127.0.0.1");
+	server_addr.sin_port=htons(SVR_PORT);
+	server_addr.sin_addr.s_addr=inet_addr(SVR_ADDR);
 
 	if (connect(client_socket,(struct sockaddr*)&server_addr,sizeof(server_addr))==-1)
 	{
@@ -59,12 +56,12 @@ int main(int argc, char* argv[]){
 
         if(strlen(buf) != static_cast<size_t>(write(client_socket, buf, strlen(buf)))){
             cerr << "write() error!" << endl;
-            exit(-1);
+            exit(1);
         }
 
         if(read(client_socket, message, sizeof(message)) <= 0){
             cerr << "read() error!" << endl;
-            exit(-1);
+            exit(1);
         }
 
         cout << "The server told me: \n" << message << endl;
