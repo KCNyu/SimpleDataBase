@@ -197,6 +197,7 @@ void AvoidBindError(int &server_socket);
 void InitServerSocket(int &server_socket, struct sockaddr_in &server_addr);
 void PrintInfoClient(const sockaddr_in &clit_addr,
         const socklen_t &clit_addr_len);
+void ReceivedInfoClient(const sockaddr_in &clit_addr);
 void WriteMsg(FlightAll &flall, Tree<Country> &treeFrom, Tree<Country> &treeTo,
         Tree<Airline> &treeAirline, int fd, char *message);
 void catch_child(int signum);

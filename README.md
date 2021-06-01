@@ -1,2 +1,2 @@
 # SimpleDataBase
-SimpleDataBase with server and client
+Multi-process concurrent SimpleDataBase

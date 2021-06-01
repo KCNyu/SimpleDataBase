@@ -271,12 +271,22 @@ again:
 }
 void PrintInfoClient(const sockaddr_in &clit_addr,
         const socklen_t &clit_addr_len) {
-    char client_IP[1024];
+    char client_IP[INET_ADDRSTRLEN];
+    cout << "-------------------------------------" << endl;
     cout << "clit_addr_len = " << clit_addr_len << endl;
     printf("client ip:%s port:%d\n",
             inet_ntop(AF_INET, &clit_addr.sin_addr.s_addr, client_IP,
                 sizeof(client_IP)),
             ntohs(clit_addr.sin_port));
+    cout << "-------------------------------------" << endl;
+}
+void ReceivedInfoClient(const sockaddr_in &clit_addr){
+    char client_IP[INET_ADDRSTRLEN];
+    printf("received from: %s PORT:%d\n",
+            inet_ntop(AF_INET, &clit_addr.sin_addr.s_addr, client_IP,
+                sizeof(client_IP)),
+            ntohs(clit_addr.sin_port));
+    cout << "=====================================" << endl;
 }
 ssize_t Read(int fd, void *buf, size_t count) {
     ssize_t read_len;
@@ -284,7 +294,8 @@ ssize_t Read(int fd, void *buf, size_t count) {
         cout << "Client launched chat" << endl;
         return -1;
     }
-    cout << "Client: " << static_cast<char *>(buf) << endl;
+    cout << "=====================================" << endl;
+    cout << "Client: " << static_cast<char *>(buf);
     return read_len;
 }
 void BlockSIGCHLD(sigset_t &set) {

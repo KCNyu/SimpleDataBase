@@ -42,6 +42,7 @@ int main(int argc, char *argv[]) {
     sigset_t set;
     BlockSIGCHLD(set);
 
+    cout << "Accepting client connect ..." << endl;
     while (1) {
         client_socket =
             Accept(server_socket, reinterpret_cast<sockaddr *>(&client_addr),
@@ -58,6 +59,7 @@ int main(int argc, char *argv[]) {
                     close(client_socket);
                     exit(1);
                 }
+                ReceivedInfoClient(client_addr);
                 WriteMsg(flall, treeFrom, treeTo, treeAirline, client_socket, message);
             }
         } else {
