@@ -20,6 +20,7 @@
 #include <unistd.h>
 #include <wait.h>
 #include <vector>
+#include <poll.h>
 
 using namespace std;
 
@@ -27,6 +28,7 @@ using namespace std;
 #define LISTEN_MAX 128
 #define MAX_MSG 65536
 #define MAX_LEN 64
+#define OPEN_MAX 128
 
 enum Country {
     England,
