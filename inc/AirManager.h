@@ -19,13 +19,14 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <wait.h>
+#include <vector>
 
 using namespace std;
 
-#define MAX_INFO 32767
 #define SRV_PORT 9999
 #define LISTEN_MAX 128
 #define MAX_MSG 65536
+#define MAX_LEN 64
 
 enum Country {
     England,
@@ -43,6 +44,7 @@ string Airline_to_string(Airline);
 Country string_to_Country(char *);
 Airline string_to_Airline(char *);
 
+
 /////////////////////////////////////////////////////////////////////////
 
 class FlightInfo {
@@ -55,7 +57,7 @@ class FlightInfo {
 
     public:
         FlightInfo();
-        // FlightInfo(const FlightInfo&);
+        FlightInfo(char cmd[][MAX_LEN]);
         Country GetFrom_country() const;
         Country GetTo_country() const;
         Airline GetAirline_Airline() const;
@@ -74,8 +76,8 @@ class FlightInfo {
 
 class FlightAll {
     private:
+        vector<FlightInfo> Flights;
         int nKol;
-        FlightInfo Flights[MAX_INFO];
 
     public:
         FlightAll();
@@ -100,8 +102,7 @@ template <typename Key> class Tree {
     private:
         int nDepth;
         Key *pKey;
-        int nNom[MAX_INFO];
-        int nNom_i;
+        vector<int> nNom;
         Tree *pParent;
         Tree *pLeft;
         Tree *pRight;
@@ -110,18 +111,16 @@ template <typename Key> class Tree {
         Tree();
         ~Tree();
         int GetDepth() const;
-        int *GetNom() const;
+        vector<int>& GetNom();
         Tree *GetLeft();
         Tree *GetRight();
         bool Add(Key *pkey, Tree *pParent, int nNom);
-        int *Search(Key *pKey);
-        int Search_i(Key *pKey) const;
+        vector<int>& Search(Key *pKey);
         string Search_print(Key *pKey, const FlightAll &flall);
 };
 
 template <typename Key> Tree<Key>::Tree() {
     nDepth = -1;
-    nNom_i = 0;
 }
 template <typename Key> Tree<Key>::~Tree() {
     if (nDepth < 0)
@@ -131,7 +130,7 @@ template <typename Key> Tree<Key>::~Tree() {
     delete pRight;
 }
 template <typename Key> int Tree<Key>::GetDepth() const { return nDepth; }
-template <typename Key> int *Tree<Key>::GetNom() const { return nNom; }
+template <typename Key> vector<int>& Tree<Key>::GetNom() { return nNom; }
 template <typename Key> Tree<Key> *Tree<Key>::GetLeft() { return pLeft; }
 template <typename Key> Tree<Key> *Tree<Key>::GetRight() { return pRight; }
 template <typename Key>
@@ -139,14 +138,14 @@ bool Tree<Key>::Add(Key *pKey, Tree *pParent, int nNom) {
     if (nDepth < 0) {
         nDepth = 0;
         this->pKey = new Key(*pKey);
-        this->nNom[nNom_i++] = nNom;
+        this->nNom.push_back(nNom);
         this->pParent = pParent;
         this->pLeft = new Tree<Key>;
         this->pRight = new Tree<Key>;
         return true;
     }
     if (*this->pKey == *pKey) {
-        this->nNom[nNom_i++] = nNom;
+        this->nNom.push_back(nNom);
         return true;
     }
     if (*this->pKey < *pKey) {
@@ -154,34 +153,26 @@ bool Tree<Key>::Add(Key *pKey, Tree *pParent, int nNom) {
             return false;
     } else {
         if (!pRight->Add(pKey, this, nNom))
-            return false;
+           return false;
     }
     nDepth = max(pLeft->GetDepth(), pRight->GetDepth()) + 1;
     return true;
 }
-template <typename Key> int *Tree<Key>::Search(Key *pKey) {
+template <typename Key> vector<int>& Tree<Key>::Search(Key *pKey) {
     if (*this->pKey == *pKey)
         return this->nNom;
     return (*this->pKey < *pKey) ? pLeft->Search(pKey) : pRight->Search(pKey);
-}
-template <typename Key> int Tree<Key>::Search_i(Key *pKey) const {
-    if (nDepth < 0)
-        return -1;
-    if (*this->pKey == *pKey)
-        return this->nNom_i;
-    return (*this->pKey < *pKey) ? pLeft->Search_i(pKey) : pRight->Search_i(pKey);
 }
 template <typename Key>
 string Tree<Key>::Search_print(Key *pKey, const FlightAll &flall) {
     stringstream ss;
     streambuf *buffer = cout.rdbuf();
     cout.rdbuf(ss.rdbuf());
-    int *res;
-    int res_n;
-    if ((res_n = Search_i(pKey)) != -1)
-        res = Search(pKey);
-    for (int i = 0; i < res_n; i++)
-        cout << flall.GetFlight(res[i]) << endl;
+    vector<int> res;
+    res = Search(pKey);
+    for (int i : res){
+        cout << flall.GetFlight(i) << endl;
+    }
     string s(ss.str());
     cout.rdbuf(buffer);
     return s;

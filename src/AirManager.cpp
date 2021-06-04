@@ -140,6 +140,13 @@ FlightInfo::FlightInfo() {
     departure = h + ":" + m;
     duration = 2 + f_d * 0.9;
 }
+FlightInfo::FlightInfo(char cmd[][MAX_LEN]) {
+    from = string_to_Country(cmd[1]);
+    to = string_to_Country(cmd[2]);
+    airline = string_to_Airline(cmd[3]);
+    departure = cmd[4];
+    duration = atof(cmd[5]);
+}
 Country FlightInfo::GetFrom_country() const { return from; }
 Country FlightInfo::GetTo_country() const { return to; }
 Airline FlightInfo::GetAirline_Airline() const { return airline; }
@@ -194,9 +201,8 @@ string FlightAll::GetDeparture(int i) const {
 }
 double FlightAll::GetDuration(int i) { return Flights[i].GetDuration(); }
 bool FlightAll::Add(FlightInfo &info) {
-    if (nKol >= MAX_INFO)
-        return false;
-    Flights[nKol++] = info;
+    Flights.push_back(info);
+    nKol++;
     return true;
 }
 ostream &operator<<(ostream &os, const FlightAll &flall) {
@@ -304,8 +310,12 @@ void BlockSIGCHLD(sigset_t &set) {
     sigprocmask(SIG_BLOCK, &set, NULL);
 }
 void catch_child(int signum) {
-    while (waitpid(0, nullptr, WNOHANG) > 0)
-        ;
+    pid_t pid;
+    while ((pid = waitpid(0, nullptr, WNOHANG)) > 0){
+        cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+        cout << "catch the child: " << pid << endl;
+        cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+    }
 }
 void SigAction(sigset_t &set) {
     struct sigaction act;
@@ -329,7 +339,34 @@ void WriteMsg(FlightAll &flall, Tree<Country> &treeFrom, Tree<Country> &treeTo,
     } else if (strncmp(message, "AIRLINE", 7) == 0) {
         Airline a = string_to_Airline(message + 8);
         strcpy(message, treeAirline.Search_print(&a, flall).c_str());
-    } else {
+    }  else if (strncmp(message, "ADD", 3) == 0) {
+        char cmd[MAX_LEN][MAX_LEN];
+        char** cmd_tmp = (char**)calloc(sizeof(char*),64);
+        bzero(cmd,sizeof(cmd));
+        int i = 0;
+        cmd_tmp[i++] = strtok(message," ");
+        while((cmd_tmp[i] = strtok(NULL," ")) != NULL){
+            i++;
+        }
+        for(int k = 1; k < 6; k++){
+            sprintf(cmd[k],"%s\n",cmd_tmp[k]);
+            if(k > 3){
+                strcpy(cmd[k],cmd_tmp[k]);
+            }
+        }
+        free(cmd_tmp);
+        FlightInfo f(cmd);
+        flall.Add(f);
+        int index = flall.GetKol()-1;
+        Country c_from = flall.GetFrom_country(index);
+        Country c_to = flall.GetTo_country(index);
+        Airline a = flall.GetAirline_Airline(index);
+        treeFrom.Add(&c_from, NULL, index);
+        treeTo.Add(&c_to, NULL, index);
+        treeAirline.Add(&a, NULL, index);
+        strcpy(message, "add recevied!\n");
+    }
+    else {
         strcpy(message, "recevied!\n");
     }
 
