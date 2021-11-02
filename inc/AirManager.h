@@ -21,6 +21,7 @@
 #include <wait.h>
 #include <vector>
 #include <poll.h>
+#include <sys/epoll.h>
 
 using namespace std;
 

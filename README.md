@@ -1,3 +1,3 @@
 # SimpleDataBase
 ##### Multi-process concurrent SimpleDataBase -> server
-##### I/O multiplexing in POLL mode -> server_poll
+##### I/O multiplexing in POLL mode -> server_poll -> server_epoll
